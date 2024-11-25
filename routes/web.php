@@ -9,6 +9,9 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
     // Comment management
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+    //Roles management
+    Route::post('/assign-role', [RoleController::class, 'assignRole'])->name('assign.role');
 });
 
 // Registration routes
@@ -60,6 +66,12 @@ Route::post('/notifications/mark-as-read', function () {
 
 //Like route
 Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
+
+//Role route
+Route::delete('/remove-role/{user}', [RoleController::class, 'removeRoles'])->name('remove.role');
+
+//Admin route
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
 // Include additional auth routes
 require __DIR__.'/auth.php';

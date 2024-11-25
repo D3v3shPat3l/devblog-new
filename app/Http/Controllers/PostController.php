@@ -39,17 +39,6 @@ class PostController extends Controller
         return redirect()->route('dashboard')->with('success', 'Post created successfully');
     }
 
-    // Show the edit post form
-    public function edit(Post $post)
-    {
-        // Check if the user is authorized to edit the post
-        if (Auth::id() !== $post->user_id && !Auth::user()->hasRole('admin')) {
-            return redirect()->route('dashboard')->with('error', 'Unauthorized action.');
-        }
-
-        return view('posts.edit', compact('post'));
-    }
-
     // Update the specified post in storage
     public function update(Request $request, Post $post)
     {
@@ -73,16 +62,22 @@ class PostController extends Controller
         return redirect()->route('dashboard')->with('success', 'Post updated successfully');
     }
 
-    // Delete the specified post
-    public function destroy(Post $post)
+    public function edit(Post $post)
     {
-        // Check if the user is authorized to delete the post
-        if (Auth::id() !== $post->user_id && !Auth::user()->hasRole('admin')) {
-            return redirect()->route('dashboard')->with('error', 'Unauthorized action.');
-        }
+    if (auth()->user()->id !== $post->user_id && !auth()->user()->hasRole('editor')) {
+        abort(403, 'You are not authorized to edit this post.');
+    }
 
-        // Delete the post
-        $post->delete();
-        return redirect()->route('dashboard')->with('success', 'Post deleted successfully.');
+    return view('posts.edit', compact('post'));
+    }
+
+public function destroy(Post $post)
+    {
+    if (auth()->user()->id !== $post->user_id && !auth()->user()->hasRole('admin')) {
+        abort(403, 'You are not authorized to delete this post.');
+    }
+
+    $post->delete();
+    return redirect()->route('dashboard')->with('success', 'Post deleted successfully.');
     }
 }

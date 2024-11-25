@@ -55,11 +55,11 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        if (Auth::user()->id === $comment->user_id || Auth::user()->hasRole('admin')) {
-            $comment->delete();
-            return redirect()->back()->with('success', 'Comment deleted successfully.');
+        if (auth()->user()->id !== $comment->user_id && !auth()->user()->hasRole('moderator')) {
+            abort(403, 'You are not authorized to delete this comment.');
         }
-
-        return redirect()->back()->with('error', 'You are not authorized to delete this comment.');
-    }
+    
+        $comment->delete();
+        return back()->with('success', 'Comment deleted successfully.');
+    }    
 }
