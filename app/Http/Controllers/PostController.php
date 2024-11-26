@@ -5,14 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\NewsService;
 
 class PostController extends Controller
 {
-    // Show the dashboard page with all posts and comments
+    protected $newsService;
+
+    public function __construct(NewsService $newsService)
+    {
+        $this->newsService = $newsService;
+    }
+
+    // Show the dashboard page with all posts and comments and news
     public function index()
     {
         $posts = Post::with(['comments.user', 'user'])->latest()->paginate(3);
-        return view('dashboard', compact('posts'));
+        $news = $this->newsService->getTopHeadlines('us', 1);
+
+        return view('dashboard', compact('posts','news'));
     }
 
     // Store a new post

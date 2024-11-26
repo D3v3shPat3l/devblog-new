@@ -54,15 +54,23 @@
         </form>
     </div>
 
-    <div class="flex justify-center gap-4 mt-8">
+    <div class="flex flex-wrap justify-center gap-4 mt-8">
     <!-- Weather Card -->
     <div id="weather" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center">
         <p id="loadingMessage" class="text-gray-600">Loading weather information...</p>
     </div>
 
     <!-- News Card -->
-    <div id="news" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center">
-        <p id="loadingApiMessage" class="text-gray-600">Loading news data...</p>
+    <div id="news" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center overflow-y-auto">
+        @forelse ($news as $article)
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <h3 class="text-lg font-bold text-gray-800">{{ $article['title'] }}</h3>
+                <p class="text-sm text-gray-600">{{ $article['description'] ?? 'No description available' }}</p>
+                <a href="{{ $article['url'] }}" target="_blank" class="text-blue-600 hover:underline text-sm">Read more</a>
+            </div>
+        @empty
+            <p class="text-red-500 text-center">No news available at the moment.</p>
+        @endforelse
     </div>
     </div>
 
@@ -220,34 +228,8 @@
             }
         }
 
-        async function fetchNews() {
-            const newsContainer = document.getElementById('news');
-            try {
-                const apiKey = 'a31c0c0912e744f98c6f4ca8a7c7d318';
-                const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`);
-                
-                if (!response.ok) throw new Error('Failed to fetch news data');
-                
-                const data = await response.json();
-                
-                const newsHtml = data.articles.slice(0, 1).map(article => `
-                    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">${article.title}</h3>
-                        <p class="text-sm text-gray-600">${article.description || 'No description available'}</p>
-                        <a href="${article.url}" target="_blank" class="text-blue-600 hover:underline text-sm">Read more</a>
-                    </div>
-                `).join('');
-
-                newsContainer.innerHTML = newsHtml;
-            } catch (error) {
-                console.error('Error:', error);
-                newsContainer.innerHTML = `<p class="text-red-500 text-center">Failed to load news information. Please try again later.</p>`;
-            }
-        }
-
         fetchWeather();
-        fetchNews();
-
+        
     </script>
     </body>
 </html>
