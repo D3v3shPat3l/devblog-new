@@ -7,9 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-cover bg-center flex flex-col items-center min-h-screen" style="background-image: url('/images/background.jpg');">
+    <!-- Back Button -->
+    <div class="absolute top-0 left-0 m-6">
+        <button onclick="history.back()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Back
+        </button>
+    </div>
 
     <!-- Main Container -->
-    <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-4xl w-full mt-10">
+    <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-4xl w-full mt-20">
         <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">Admin Dashboard</h1>
 
         <!-- Role Assignment Section -->

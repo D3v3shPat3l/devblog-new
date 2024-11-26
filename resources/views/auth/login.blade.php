@@ -8,6 +8,13 @@
 </head>
 <body class="bg-cover bg-center h-screen flex items-center justify-center" style="background-image: url('/images/background.jpg');">
 
+     <!-- Back Button -->
+    <div class="absolute top-0 left-0 m-6">
+        <button onclick="history.back()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Back
+        </button>
+    </div>
+
     <!-- Form Container -->
     <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md text-center">
 

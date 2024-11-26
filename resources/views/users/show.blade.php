@@ -8,6 +8,13 @@
 </head>
 <body class="bg-cover bg-center flex flex-col items-center min-h-screen" style="background-image: url('/images/background.jpg');">
 
+    <!-- Back Button -->
+    <div class="absolute top-0 left-0 m-6">
+        <button onclick="history.back()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Back
+        </button>
+    </div>
+
     <div class="absolute top-0 right-0 m-6">
         <!-- Roles Button -->
         <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
