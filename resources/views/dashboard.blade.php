@@ -54,6 +54,18 @@
         </form>
     </div>
 
+    <div class="flex justify-center gap-4 mt-8">
+    <!-- Weather Card -->
+    <div id="weather" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center">
+        <p id="loadingMessage" class="text-gray-600">Loading weather information...</p>
+    </div>
+
+    <!-- News Card -->
+    <div id="news" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center">
+        <p id="loadingApiMessage" class="text-gray-600">Loading news data...</p>
+    </div>
+    </div>
+
     <!-- Main Dashboard Content -->
     <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-2xl w-full mt-10">
         <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">Welcome to Your Dashboard, {{ auth()->user()->name }}!</h1>
@@ -177,5 +189,65 @@
             menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
         });
     </script>
-</body>
+
+    <script>
+        const weatherContainer = document.getElementById('weather');
+
+        async function fetchWeather() {
+            try {
+                const apiKey = '1b0ac754cfcd4628bf9180423242611';
+                const city = 'Swansea'; 
+                const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`);
+                
+                if (!response.ok) throw new Error('Failed to fetch weather data');
+                
+                const data = await response.json();
+                
+                const weatherHtml = `
+                    <div class="flex justify-center items-center mb-4">
+                        <img src="https:${data.current.condition.icon}" alt="${data.current.condition.text}" class="w-16 h-16">
+                    </div>
+                    <h2 class="text-2xl font-bold text-center text-gray-800">${data.location.name}</h2>
+                    <p class="text-xl text-center text-gray-600">${data.current.condition.text}</p>
+                    <p class="text-lg text-center text-gray-800 mt-2">Temperature: <span class="text-indigo-600">${data.current.temp_c}°C</span></p>
+                    <p class="text-sm text-center text-gray-500 mt-2">Humidity: <span class="font-semibold">${data.current.humidity}%</span> | Wind Speed: <span class="font-semibold">${data.current.wind_kph} kph</span></p>
+                `;
+
+                weatherContainer.innerHTML = weatherHtml;
+            } catch (error) {
+                console.error('Error:', error);
+                weatherContainer.innerHTML = `<p class="text-red-500 text-center">Failed to load weather information. Please try again later.</p>`;
+            }
+        }
+
+        async function fetchNews() {
+            const newsContainer = document.getElementById('news');
+            try {
+                const apiKey = 'a31c0c0912e744f98c6f4ca8a7c7d318';
+                const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`);
+                
+                if (!response.ok) throw new Error('Failed to fetch news data');
+                
+                const data = await response.json();
+                
+                const newsHtml = data.articles.slice(0, 1).map(article => `
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">${article.title}</h3>
+                        <p class="text-sm text-gray-600">${article.description || 'No description available'}</p>
+                        <a href="${article.url}" target="_blank" class="text-blue-600 hover:underline text-sm">Read more</a>
+                    </div>
+                `).join('');
+
+                newsContainer.innerHTML = newsHtml;
+            } catch (error) {
+                console.error('Error:', error);
+                newsContainer.innerHTML = `<p class="text-red-500 text-center">Failed to load news information. Please try again later.</p>`;
+            }
+        }
+
+        fetchWeather();
+        fetchNews();
+
+    </script>
+    </body>
 </html>
