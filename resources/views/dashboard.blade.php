@@ -54,7 +54,7 @@
         </form>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-4 mt-8">
+    <div class="flex flex-wrap justify-center gap-8 mt-8">
     <!-- Weather Card -->
     <div id="weather" class="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-80 h-80 flex flex-col items-center">
         <p id="loadingMessage" class="text-gray-600">Loading weather information...</p>
@@ -167,20 +167,25 @@
                     </form>
 
                     <!-- Edit and Delete Buttons -->
-                    @if(auth()->user()->hasRole('admin') || auth()->user()->id == $post->user_id)
-                        <div class="flex space-x-2 mt-4">
+                    <div class="mt-4 flex space-x-2">
+                        <!-- Edit Button -->
+                        @if(auth()->user()->id === $post->user_id || auth()->user()->hasRole('admin') || auth()->user()->hasRole('moderator') || auth()->user()->hasRole('editor'))
                             <a href="{{ route('posts.edit', $post->id) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
                                 Edit
                             </a>
-                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                        @endif
+
+                        <!-- Delete Button -->
+                        @if(auth()->user()->id === $post->user_id || auth()->user()->hasRole('admin'))
+                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
                                     Delete
                                 </button>
                             </form>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             @endforeach
         </div>

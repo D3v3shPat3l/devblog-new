@@ -74,7 +74,8 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-    if (auth()->user()->id !== $post->user_id && !auth()->user()->hasRole('editor')) {
+    if (auth()->user()->id !== $post->user_id && !auth()->user()->hasRole('editor') 
+        && !auth()->user()->hasRole('admin') && !auth()->user()->hasRole('moderator')) {
         abort(403, 'You are not authorized to edit this post.');
     }
 

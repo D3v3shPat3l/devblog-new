@@ -41,11 +41,16 @@
                     @endif
 
                     <!-- Edit and Delete Buttons -->
-                    @if(auth()->user()->id === $post->user_id || auth()->user()->hasRole('admin'))
-                        <div class="mt-4 flex space-x-2">
+                    <div class="mt-4 flex space-x-2">
+                        <!-- Edit Button -->
+                        @if(auth()->user()->id === $post->user_id || auth()->user()->hasRole('admin') || auth()->user()->hasRole('moderator') || auth()->user()->hasRole('editor'))
                             <a href="{{ route('posts.edit', $post->id) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
                                 Edit
                             </a>
+                        @endif
+
+                        <!-- Delete Button -->
+                        @if(auth()->user()->id === $post->user_id || auth()->user()->hasRole('admin'))
                             <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                 @csrf
                                 @method('DELETE')
@@ -53,8 +58,8 @@
                                     Delete
                                 </button>
                             </form>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
 
                     <!-- Comments Section -->
                     <div class="mt-4">
