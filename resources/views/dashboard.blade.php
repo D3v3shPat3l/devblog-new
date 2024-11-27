@@ -143,6 +143,18 @@
                                     on {{ $comment->created_at->format('M d, Y') }}
                                 </p>
 
+                                <!-- Like Button for Comments -->
+                                <div class="flex items-center space-x-2 mt-2">
+                                    <form action="{{ route('comments.like', $comment) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="px-4 py-2 rounded-lg 
+                                            {{ $comment->likes->contains('user_id', auth()->id()) ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-800' }}">
+                                            {{ $comment->likes->contains('user_id', auth()->id()) ? 'Unlike' : 'Like' }}
+                                        </button>
+                                    </form>
+                                    <span>{{ $comment->likes()->count() }} likes</span>
+                                </div>
+
                                 <!-- Delete Comment Option -->
                                 @if(auth()->user()->id === $comment->user_id || auth()->user()->hasRole('admin'))
                                     <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="mt-2" onsubmit="return confirm('Are you sure you want to delete this comment?');">

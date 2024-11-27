@@ -66,6 +66,7 @@ Route::post('/notifications/mark-as-read', function () {
 
 //Like route
 Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
+Route::post('comments/{comment}/like', [CommentController::class, 'like'])->name('comments.like');
 
 //Role route
 Route::delete('/remove-role/{user}', [RoleController::class, 'removeRoles'])->name('remove.role');
