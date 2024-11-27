@@ -123,11 +123,12 @@
                     <!-- Like Button and Count -->
                     <div class="mt-2 flex items-center space-x-2">
                         <form action="{{ route('posts.like', $post) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="px-4 py-2 rounded-lg 
-                                {{ $post->likes->contains('user_id', auth()->id()) ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-800' }}">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-transparent border-none">
+                            <i class="heart-icon {{ $post->likes->contains('user_id', auth()->id()) ? 'text-red-500' : 'text-gray-800' }}">
                                 {{ $post->likes->contains('user_id', auth()->id()) ? '❤️' : '🤍' }}
-                            </button>
+                            </i>
+                        </button>
                         </form>
                         <span>{{ $post->likes()->count() }} likes</span>
                     </div>
@@ -147,9 +148,10 @@
                                 <div class="flex items-center space-x-2 mt-2">
                                     <form action="{{ route('comments.like', $comment) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-4 py-2 rounded-lg 
-                                            {{ $comment->likes->contains('user_id', auth()->id()) ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-800' }}">
-                                            {{ $comment->likes->contains('user_id', auth()->id()) ? '❤️' : '🤍' }}
+                                        <button type="submit" class="px-4 py-2 rounded-lg bg-transparent border-none">
+                                            <i class="heart-icon {{ $comment->likes->contains('user_id', auth()->id()) ? 'text-red-500' : 'text-gray-800' }}">
+                                                {{ $comment->likes->contains('user_id', auth()->id()) ? '❤️' : '🤍' }}
+                                            </i>
                                         </button>
                                     </form>
                                     <span>{{ $comment->likes()->count() }} likes</span>
