@@ -126,7 +126,7 @@
                             @csrf
                             <button type="submit" class="px-4 py-2 rounded-lg 
                                 {{ $post->likes->contains('user_id', auth()->id()) ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-800' }}">
-                                {{ $post->likes->contains('user_id', auth()->id()) ? 'Unlike' : 'Like' }}
+                                {{ $post->likes->contains('user_id', auth()->id()) ? '❤️' : '🤍' }}
                             </button>
                         </form>
                         <span>{{ $post->likes()->count() }} likes</span>
@@ -149,7 +149,7 @@
                                         @csrf
                                         <button type="submit" class="px-4 py-2 rounded-lg 
                                             {{ $comment->likes->contains('user_id', auth()->id()) ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-800' }}">
-                                            {{ $comment->likes->contains('user_id', auth()->id()) ? 'Unlike' : 'Like' }}
+                                            {{ $comment->likes->contains('user_id', auth()->id()) ? '❤️' : '🤍' }}
                                         </button>
                                     </form>
                                     <span>{{ $comment->likes()->count() }} likes</span>
