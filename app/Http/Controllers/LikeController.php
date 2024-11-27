@@ -22,7 +22,6 @@ class LikeController extends Controller
     {
         $post->likes()->create(['user_id' => auth()->id()]);
 
-        // Notify post author if liked by someone else
         if ($post->user_id !== auth()->id()) {
             $post->user->notify(new PostLiked($post, auth()->user()));
         }

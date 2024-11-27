@@ -16,7 +16,6 @@ class PostController extends Controller
         $this->newsService = $newsService;
     }
 
-    // Show the dashboard page with all posts and comments and news
     public function index()
     {
         $posts = Post::with(['comments.user', 'user'])->latest()->paginate(3);
@@ -25,7 +24,6 @@ class PostController extends Controller
         return view('dashboard', compact('posts','news'));
     }
 
-    // Store a new post
     public function store(Request $request)
     {
         $request->validate([
@@ -49,7 +47,6 @@ class PostController extends Controller
         return redirect()->route('dashboard')->with('success', 'Post created successfully');
     }
 
-    // Update the specified post in storage
     public function update(Request $request, Post $post)
     {
         $request->validate([
@@ -82,7 +79,7 @@ class PostController extends Controller
     return view('posts.edit', compact('post'));
     }
 
-public function destroy(Post $post)
+    public function destroy(Post $post)
     {
     if (auth()->user()->id !== $post->user_id && !auth()->user()->hasRole('admin')) {
         abort(403, 'You are not authorized to delete this post.');

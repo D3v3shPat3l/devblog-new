@@ -210,6 +210,7 @@
         </div>
     </div>
 
+    <!-- Notification Visibility -->
     <script>
         document.getElementById('notificationDropdown').addEventListener('click', function() {
             var menu = document.getElementById('notificationMenu');
@@ -217,6 +218,7 @@
         });
     </script>
 
+    <!-- Displays Weather -->
     <script>
         const weatherContainer = document.getElementById('weather');
 
@@ -246,9 +248,7 @@
                 weatherContainer.innerHTML = `<p class="text-red-500 text-center">Failed to load weather information. Please try again later.</p>`;
             }
         }
-
         fetchWeather();
-        
     </script>
     </body>
 </html>

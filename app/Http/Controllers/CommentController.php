@@ -11,9 +11,6 @@ use App\Notifications\NewCommentNotification;
 
 class CommentController extends Controller
 {
-    /**
-     * Store a new comment
-     */
     public function store(Request $request, $postId)
     {
         $request->validate([
@@ -22,19 +19,17 @@ class CommentController extends Controller
 
         $post = Post::findOrFail($postId);
 
-        // Create the comment
         $comment = Comment::create([
             'post_id' => $post->id,
             'user_id' => Auth::id(),
             'content' => $request->content,
         ]);
 
-        // Notify the post owner if it's not the current user
         if ($post->user_id !== Auth::id()) {
             $post->user->notify(new NewCommentNotification($comment));
         }
 
-        // Check if the request is AJAX
+        // Check if the request is AJAX - I don't use this
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -47,13 +42,9 @@ class CommentController extends Controller
             ]);
         }
 
-        // Fallback for regular form submission
         return redirect()->route('dashboard')->with('success', 'Comment added successfully');
     }
 
-    /**
-     * Delete a comment
-     */
     public function destroy(Comment $comment)
     {
         if (auth()->user()->id !== $comment->user_id && !auth()->user()->hasRole('moderator')) {
@@ -64,28 +55,20 @@ class CommentController extends Controller
         return back()->with('success', 'Comment deleted successfully.');
     }
 
-    /**
-     * Like a comment
-     */
     public function like(Comment $comment)
     {
-        // Check if the user has already liked the comment
         $like = Like::where('user_id', auth()->id())
                     ->where('likeable_id', $comment->id)
                     ->where('likeable_type', Comment::class)
                     ->first();
 
         if ($like) {
-            // If the user already liked the comment, remove the like (unlike)
             $like->delete();
         } else {
-            // If the user hasn't liked it yet, create a new like
             $comment->likes()->create([
                 'user_id' => auth()->id(),
             ]);
         }
-
-        // Return back to the previous page
         return back();
     }
 }
